@@ -202,10 +202,10 @@ col1, col2, col3 = st.columns([2, 1, 1])
 with col1:
     st.markdown("My account balance in S$: *")
     # balance = st.number_input("", min_value=0, value=100000,step=5000, label_visibility="collapsed")
-    balance = st.select_slider("", options=list(range(1000, 100001, 1000)))
+    balance = st.select_slider("", options=list(range(1000, 200001, 1000)))
     
     # Salary dropdown
-    st.markdown("SALARY: I credit a salary of at least S$1800 via the following options. *")
+    st.markdown("SALARY: I credit a salary of at least S$1800 each month via the following options: *")
     salary_option = st.selectbox(
         "",
         ["GIRO", "FAST", "PayNow via GIRO","PayNow via FAST", "None of the above"],
@@ -216,7 +216,7 @@ with col1:
     st.markdown("SAVE: Do you at least have 500$ more in your account this month compared to last month on average? *")
     save_amount = st.toggle("")
     
-    st.markdown("SPEND: I spend the following amount on my OCBC 365, OCBC INFINITY, OCBC NXT, OCBC 90°N or OCBC Rewards Card (in S$). *")
+    st.markdown("SPEND: I spend the following amount on my OCBC 365, OCBC INFINITY, OCBC NXT, OCBC 90°N or OCBC Rewards Card in a month (in S$): *")
     spend_amount = st.select_slider("Spending Amount:", options= list(range(0, 10000, 50)))
 
     st.markdown("INSURE+INVEST: I have/plan to purchase(d) the following products with a min. investment of S$20,000: ")
@@ -234,6 +234,7 @@ def calculate_interest_rate(balance, SALARY, SAVE, SPEND, INSURE, INVEST):
     # Initialize interest rates
     first_75k_rate = 0
     next_25k_rate = 0
+    base_rate = 0.05
     eir_rate = 0
     
     # Check conditions for "Salary"
@@ -267,7 +268,7 @@ def calculate_interest_rate(balance, SALARY, SAVE, SPEND, INSURE, INVEST):
         next_25k_rate += 2.40
 
     # Calculate EIR (Effective Interest Rate)
-    eir_rate = (3/4 * first_75k_rate + 1/4 * next_25k_rate) 
+    eir_rate = (3/4 * first_75k_rate + 1/4 * next_25k_rate) + base_rate
     return first_75k_rate, next_25k_rate, eir_rate
 
 def bool_insure_invest(insure_invest_ls, insure_pdts_ls, invest_pdts_ls):
@@ -285,9 +286,9 @@ first_75k_rate, next_25k_rate, eir_rate = calculate_interest_rate(balance, salar
 
 
 if balance <= 100000:
-    int_amount = balance*eir_rate/100/12
+    int_amount = balance*(eir_rate/100/12)
 else:
-    int_amount = 100000*eir_rate/100/12
+    int_amount = 100000*eir_rate/100/12 + ((balance-100000) * 0.05/100/12)
 
 with col3:
     # Result box with styled dollar amount
@@ -300,10 +301,11 @@ with col3:
     # """, unsafe_allow_html=True)
     st.metric(label="Total Interest Earned per Month", value=f"S$ {int_amount:.2f}")
     st.metric(label="Total Interest Earned per Month in %", value=f"{eir_rate:.2f}%")
-    
+    # st.write(f"{first_75k_rate=}")
+    # st.write(f"{next_25k_rate=}")
     # Action buttons
-    st.button("Apply Now!")
-    st.button("Tell me more!", type="secondary")
+    st.button("Apply Now!", type="primary")
+    st.button("Tell me more!", type="primary")
 
 # Help button at bottom right
 st.markdown("""
