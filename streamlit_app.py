@@ -268,7 +268,10 @@ def calculate_interest_rate(balance, SALARY, SAVE, SPEND, INSURE, INVEST):
         next_25k_rate += 2.40
 
     # Calculate EIR (Effective Interest Rate)
-    eir_rate = (3/4 * first_75k_rate + 1/4 * next_25k_rate) + base_rate
+    if balance <= 75000:
+        eir_rate = first_75k_rate
+    else:
+        eir_rate = (3/4 * first_75k_rate + 1/4 * next_25k_rate) + base_rate
     return first_75k_rate, next_25k_rate, eir_rate
 
 def bool_insure_invest(insure_invest_ls, insure_pdts_ls, invest_pdts_ls):
