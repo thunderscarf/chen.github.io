@@ -202,7 +202,7 @@ col1, col2, col3 = st.columns([2, 1, 1])
 with col1:
     st.markdown("My account balance in S$: *")
     # balance = st.number_input("", min_value=0, value=100000,step=5000, label_visibility="collapsed")
-    balance = st.select_slider("", options=list(range(1000, 200001, 1000)))
+    balance = st.select_slider("", options=list(range(1000, 200001, 500)))
     
     # Salary dropdown
     st.markdown("SALARY: I credit a salary of at least S$1800 each month via the following options: *")
