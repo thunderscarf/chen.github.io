@@ -300,7 +300,7 @@ with col3:
     #     </div>
     # """, unsafe_allow_html=True)
     st.metric(label="Total Interest Earned per Month", value=f"S$ {int_amount:.2f}")
-    st.metric(label="Total Interest Earned per Month in %", value=f"{eir_rate:.2f}%")
+    st.metric(label="Annual Interest Earned in %", value=f"{eir_rate:.2f}%")
     # st.write(f"{first_75k_rate=}")
     # st.write(f"{next_25k_rate=}")
     # Action buttons
